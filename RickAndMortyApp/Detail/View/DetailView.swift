@@ -13,6 +13,7 @@ final class DetailView: UIView {
     
     private enum Constants {
         static let descriptionSpacing: CGFloat = 10
+        static let rowSpacing: CGFloat = 5
     }
     
     private let characterImageView: UIImageView = {
@@ -103,8 +104,8 @@ final class DetailView: UIView {
     }
     
     private func setupStyle() {
-        descriptionContainerStackView.setCustomSpacing(5, after: lastLocationTitleLabel)
-        descriptionContainerStackView.setCustomSpacing(5, after: originLocationTitleLabel)
+        descriptionContainerStackView.setCustomSpacing(Constants.rowSpacing, after: lastLocationTitleLabel)
+        descriptionContainerStackView.setCustomSpacing(Constants.rowSpacing, after: originLocationTitleLabel)
     }
     
     private func setupConstraints() {

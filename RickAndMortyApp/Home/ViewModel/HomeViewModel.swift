@@ -10,9 +10,7 @@ import Foundation
 protocol HomeViewModelProtocol: AnyObject {
     @MainActor func loadCharacters()
     @MainActor func loadMoreCharacters()
-    
     func navigateToCharacter(index: Int)
-    
 }
 
 final class HomeViewModel: HomeViewModelProtocol {
@@ -50,7 +48,7 @@ final class HomeViewModel: HomeViewModelProtocol {
     }
     
     func navigateToCharacter(index: Int) {
-        let character = characters[index]
+        guard let character = characters[safe: index] else { return }
         router.navigateTo(.detail(character))
     }
 }

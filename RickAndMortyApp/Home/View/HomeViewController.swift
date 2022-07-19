@@ -104,20 +104,20 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension HomeViewController: HomeViewProtocol {
-    func startLoading() {
+    @MainActor func startLoading() {
         activityIndicator.startAnimating()
     }
     
-    func stopLoading() {
+    @MainActor func stopLoading() {
         activityIndicator.stopAnimating()
     }
     
-    func loadCharacters(_ characters: [CharacterRepresentationPreviewModel]) {
+    @MainActor func loadCharacters(_ characters: [CharacterRepresentationPreviewModel]) {
         self.characters.append(contentsOf: characters)
         tableView.reloadData()
     }
     
-    func showDefaultError() {
+    @MainActor func showDefaultError() {
         
     }
 }
