@@ -54,7 +54,7 @@ final class HomeViewController: UIViewController {
     private func setupView() {
         view.addSubview(tableView)
         view.addSubview(activityIndicator)
-        navigationItem.title = "Characters"
+        navigationItem.title = "Rick and Morty"
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
