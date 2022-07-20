@@ -116,6 +116,6 @@ extension HomeViewController: HomeViewProtocol {
     }
     
     func showDefaultError() {
-        
+//        TODO: implement default error view
     }
 }
