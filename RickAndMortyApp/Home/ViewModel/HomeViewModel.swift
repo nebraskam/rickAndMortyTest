@@ -8,6 +8,7 @@
 import Foundation
 
 protocol HomeViewModelProtocol: AnyObject {
+    var charactersPreview: [CharacterRepresentationPreviewModel] { get }
     @MainActor func loadCharacters()
     @MainActor func loadMoreCharacters()
     func navigateToCharacter(index: Int)
@@ -20,6 +21,8 @@ final class HomeViewModel: HomeViewModelProtocol {
     weak var view: HomeViewProtocol?
     
     private var characters: [CharacterModel] = []
+    var charactersPreview: [CharacterRepresentationPreviewModel] = []
+
     private var currentPage: Int = 1
     
     init(repostory: CharacterRepositoryProtocol, router: AppRouterProtocol) {
@@ -32,9 +35,8 @@ final class HomeViewModel: HomeViewModelProtocol {
             view?.startLoading()
             do {
                 let response = try await repository.getCharacters(in: currentPage)
-                characters.append(contentsOf: response.results)
-                let charactersPreview = characters.map { CharacterRepresentationPreviewModel(name: $0.name, imageUrl: $0.image) }
-                view?.loadCharacters(charactersPreview)
+                updateCharacters(with: response)
+                view?.loadCharacters()
             } catch {
                 view?.showDefaultError()
             }
@@ -45,6 +47,13 @@ final class HomeViewModel: HomeViewModelProtocol {
     func loadMoreCharacters() {
         currentPage += 1
         loadCharacters()
+    }
+    
+    private func updateCharacters(with response: CharacterResponse) {
+        let newCharacters = response.results
+        let newCharacterPreviews = newCharacters.map { CharacterRepresentationPreviewModel(name: $0.name, imageUrl: $0.image) }
+        characters.append(contentsOf: newCharacters)
+        charactersPreview.append(contentsOf: newCharacterPreviews)
     }
     
     func navigateToCharacter(index: Int) {

@@ -22,7 +22,7 @@ final class HomeViewMock: HomeViewProtocol {
         stopLoadingIsCalled = true
     }
     
-    func loadCharacters(_ characters: [CharacterRepresentationPreviewModel]) {
+    func loadCharacters() {
         loadCharacterIsCalled = true
     }
     

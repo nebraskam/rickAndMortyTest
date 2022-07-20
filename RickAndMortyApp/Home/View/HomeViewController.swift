@@ -10,14 +10,13 @@ import UIKit
 protocol HomeViewProtocol: AnyObject {
     func startLoading()
     func stopLoading()
-    func loadCharacters(_ characters: [CharacterRepresentationPreviewModel])
+    func loadCharacters()
     func showDefaultError()
 }
 
 final class HomeViewController: UIViewController {
     
     private let viewModel: HomeViewModelProtocol
-    var characters: [CharacterRepresentationPreviewModel] = []
     
     init(viewModel: HomeViewModelProtocol) {
         self.viewModel = viewModel
@@ -46,7 +45,7 @@ final class HomeViewController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupStyle()
+        setupNavBar()
         setupView()
         setupTableView()
         viewModel.loadCharacters()
@@ -72,7 +71,7 @@ final class HomeViewController: UIViewController {
         tableView.delegate = self
     }
     
-    private func setupStyle() {
+    private func setupNavBar() {
         navigationItem.backBarButtonItem = UIBarButtonItem()
     }
 }
@@ -80,14 +79,14 @@ final class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return characters.count
+        return viewModel.charactersPreview.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CharacterCell") as? CharacterCell else {
             return UITableViewCell()
         }
-        let character = characters[indexPath.row]
+        let character = viewModel.charactersPreview[indexPath.row]
         cell.configure(model: character)
         return cell
     }
@@ -98,26 +97,25 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard indexPath.row >= characters.count - 2 else { return }
+        guard indexPath.row >= viewModel.charactersPreview.count - 2 else { return }
         viewModel.loadMoreCharacters()
     }
 }
 
 extension HomeViewController: HomeViewProtocol {
-    @MainActor func startLoading() {
+    func startLoading() {
         activityIndicator.startAnimating()
     }
     
-    @MainActor func stopLoading() {
+    func stopLoading() {
         activityIndicator.stopAnimating()
     }
     
-    @MainActor func loadCharacters(_ characters: [CharacterRepresentationPreviewModel]) {
-        self.characters.append(contentsOf: characters)
+    func loadCharacters() {
         tableView.reloadData()
     }
     
-    @MainActor func showDefaultError() {
+    func showDefaultError() {
         
     }
 }
